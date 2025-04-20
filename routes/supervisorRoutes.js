@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const supervisorController = require('../controllers/supervisorController');
+const auth = require('../middleware/auth');
+
+router.get('/', auth(), supervisorController.getAllSupervisors);
+router.post('/', auth(['HR']), supervisorController.createSupervisor);
+router.get('/:id', auth(), supervisorController.getSupervisorById);
+router.put('/:id', auth(['HR']), supervisorController.updateSupervisor);
+router.delete('/:id', auth(['HR']), supervisorController.deleteSupervisor);
+
+module.exports = router;
