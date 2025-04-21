@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const departmentController = require('../controllers/departmentController.js');
-const auth = require('../middleware/authMiddleware');
+const auth = require('../middleware/auth.js');
 
 router.get('/', auth(), departmentController.getAllDepartments);
 router.post('/', auth(['HR']), departmentController.createDepartment);

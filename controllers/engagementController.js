@@ -1,5 +1,23 @@
 const { Engagement, Employee, Department, JobTitle, Supervisor } = require('../models');
 
+ 
+exports.getAllEngagements = async (req, res) => {
+  try {
+    const engagements = await Engagement.findAll({
+      include: [
+        { model: Employee },
+        { model: Department },
+        { model: JobTitle },
+        { model: Supervisor }
+      ],
+      order: [['StartDate', 'DESC']]  
+    });
+    res.status(200).json(engagements);  
+  } catch (error) {
+    console.error("Error fetching engagements:", error);
+    res.status(500).json({ error: "Failed to fetch engagements" });  
+  }
+};
 exports.getAllEngagements = async (req, res) => {
   try {
     const engagements = await Engagement.findAll({
