@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const engagementController = require('../controllers/engagementController');
+const engagementController = require('../controllers/engagementController.js');
 const auth = require('../middleware/auth');
 
 router.get('/', auth(['HR', 'Supervisor', 'Manager']), engagementController.getAllEngagements);

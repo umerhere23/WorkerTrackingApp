@@ -1,5 +1,4 @@
-// models/Engagement.js
-module.exports = (sequelize, DataTypes) => {
+ module.exports = (sequelize, DataTypes) => {
     const Engagement = sequelize.define("Engagement", {
       EngagementID: {
         type: DataTypes.INTEGER,

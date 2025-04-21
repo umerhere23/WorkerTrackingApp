@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const auth = require('../middleware/auth');
+const departmentController = require('../controllers/departmentController.js');
+const auth = require('../middleware/authMiddleware');
 
-router.get('/', auth(['HR']), userController.getAllUsers);
-router.post('/', auth(['HR']), userController.createUser);
-router.get('/:id', auth(), userController.getUserById);
-router.put('/:id', auth(['HR']), userController.updateUser);
-router.delete('/:id', auth(['HR']), userController.deleteUser);
+router.get('/', auth(), departmentController.getAllDepartments);
+router.post('/', auth(['HR']), departmentController.createDepartment);
+router.get('/:id', auth(), departmentController.getDepartmentById);
+router.put('/:id', auth(['HR']), departmentController.updateDepartment);
+router.delete('/:id', auth(['HR']), departmentController.deleteDepartment);
 
 module.exports = router;

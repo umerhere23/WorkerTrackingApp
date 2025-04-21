@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const jobTitleController = require('../controllers/jobTitleController');
+const jobTitleController = require('../controllers/jobTitleController.js');
 const auth = require('../middleware/auth');
 
 router.get('/', auth(), jobTitleController.getAllJobTitles);

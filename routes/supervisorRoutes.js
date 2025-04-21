@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const supervisorController = require('../controllers/supervisorController');
+const supervisorController = require('../controllers/supervisorController.js');
 const auth = require('../middleware/auth');
 
 router.get('/', auth(), supervisorController.getAllSupervisors);
