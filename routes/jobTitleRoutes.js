@@ -3,7 +3,7 @@ const router = express.Router();
 const jobTitleController = require('../controllers/jobTitleController.js');
 const auth = require('../middleware/auth');
 
-router.get('/', auth(), jobTitleController.getAllJobTitles);
+router.get('/jobs', auth(), jobTitleController.getAllJobTitles);
 router.post('/', auth(['HR']), jobTitleController.createJobTitle);
 router.get('/:id', auth(), jobTitleController.getJobTitleById);
 router.put('/:id', auth(['HR']), jobTitleController.updateJobTitle);
