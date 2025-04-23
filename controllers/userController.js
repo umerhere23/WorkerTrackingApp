@@ -1,10 +1,11 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 
-// GET all users (HR only)
-exports.getAllUsers = async (req, res) => {
+ exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: { exclude: ['PasswordHash'] } });
+    const users = await User.findAll({
+      attributes: ['UserID', 'FullName', 'Role', 'Email', 'PasswordHash', 'createdAt']
+    });
     res.status(200).json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
