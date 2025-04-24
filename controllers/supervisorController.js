@@ -1,4 +1,4 @@
-const { Supervisor, Department } = require('../models');
+ const { Engagement, Employee, Department, JobTitle, Supervisor } = require('../models');
 
 // GET all supervisors
 exports.getAllSupervisors = async (req, res) => {
@@ -84,3 +84,28 @@ exports.deleteSupervisor = async (req, res) => {
     res.status(500).json({ error: "Failed to delete supervisor" });
   }
 };
+exports.getAllEngagementsBySupervisorId = async (req, res) => {
+  try {
+    const { supervisorId } = req.params;
+    console.log("Supervisor ID from params:", supervisorId);
+
+    const engagements = await Engagement.findAll({
+      where: { SupervisorID: supervisorId },
+      include: [
+        { model: Employee },
+        { model: Department },
+        { model: JobTitle },
+        { model: Supervisor }
+      ],
+      order: [['StartDate', 'DESC']]
+    });
+
+    res.status(200).json(engagements);
+  } catch (error) {
+    console.error("Error fetching engagements by supervisor ID:", error);
+    res.status(500).json({ error: "Failed to fetch engagements" });
+  }
+};
+
+
+

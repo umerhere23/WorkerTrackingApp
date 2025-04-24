@@ -8,5 +8,6 @@ router.post('/', auth(['HR']), supervisorController.createSupervisor);
 router.get('/:id', auth(), supervisorController.getSupervisorById);
 router.put('/:id', auth(['HR']), supervisorController.updateSupervisor);
 router.delete('/:id', auth(['HR']), supervisorController.deleteSupervisor);
+router.get('/sup/:supervisorId',auth(['Supervisor']), supervisorController.getAllEngagementsBySupervisorId);
 
 module.exports = router;

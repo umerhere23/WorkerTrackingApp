@@ -65,10 +65,10 @@ exports.createEngagement = async (req, res) => {
       Status
     });
 
+    // Send email after successful creation
     const today = new Date();
-    const end = new Date(EndDate);
-    const daysRemaining = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-
+    const endDate = new Date(newEngagement.EndDate);
+    const daysRemaining = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
     await sendEngagementAlert(newEngagement, daysRemaining);
 
     res.status(201).json(newEngagement);

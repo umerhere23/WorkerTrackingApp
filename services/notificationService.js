@@ -2,12 +2,15 @@ const nodemailer = require('nodemailer');
 const { Engagement, Employee, Department, JobTitle, Supervisor } = require('../models');
 
 const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
+    host: process.env.EMAIL_HOST,
+    port: parseInt(process.env.EMAIL_PORT),
+    secure: false, // TLS over port 587
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  
 
 function getDaysBetweenDates(startDate, endDate) {
   const oneDay = 24 * 60 * 60 * 1000;
@@ -78,4 +81,5 @@ async function checkEngagements() {
   }
 }
 
-module.exports = { checkEngagements };
+module.exports = { checkEngagements ,  sendEngagementAlert
+};
