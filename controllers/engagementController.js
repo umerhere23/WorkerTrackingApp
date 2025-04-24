@@ -1,6 +1,8 @@
 const { Engagement, Employee, Department, JobTitle, Supervisor } = require('../models');
+const { sendEngagementAlert } = require('../services/notificationService');
 
- 
+const nodemailer = require('nodemailer');
+
 exports.getAllEngagements = async (req, res) => {
   try {
     const engagements = await Engagement.findAll({
@@ -36,6 +38,7 @@ exports.getAllEngagements = async (req, res) => {
   }
 };
 
+
 exports.createEngagement = async (req, res) => {
   try {
     const {
@@ -62,12 +65,19 @@ exports.createEngagement = async (req, res) => {
       Status
     });
 
+    const today = new Date();
+    const end = new Date(EndDate);
+    const daysRemaining = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+
+    await sendEngagementAlert(newEngagement, daysRemaining);
+
     res.status(201).json(newEngagement);
   } catch (error) {
     console.error("Error creating engagement:", error);
     res.status(500).json({ error: "Failed to create engagement" });
   }
 };
+
 
 exports.getEngagementById = async (req, res) => {
   try {
