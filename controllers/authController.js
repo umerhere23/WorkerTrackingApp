@@ -43,6 +43,8 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 };
+
+
 exports.signup = async (req, res) => {
   try {
     const { fullName, email, password, role } = req.body;
@@ -51,10 +53,16 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const existingUser = await User.findOne({ where: { Email: email } });
-
+     const existingUser = await User.findOne({ where: { Email: email } });
     if (existingUser) {
       return res.status(409).json({ error: "User already exists" });
+    }
+
+     if (role.toLowerCase() === 'supervisor') {
+      const existingSupervisor = await Supervisor.findOne({ where: { FullName: fullName } });
+      if (existingSupervisor) {
+        return res.status(409).json({ error: "Supervisor with this name already exists" });
+      }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -65,6 +73,15 @@ exports.signup = async (req, res) => {
       PasswordHash: hashedPassword,
       Role: role
     });
+
+     if (role.toLowerCase() === 'supervisor') {
+      await Supervisor.create({
+        FullName: fullName,
+        Email: email,
+        SupervisorID: newUser.UserID,  
+        DepartmentID: null  
+      });
+    }
 
     res.status(201).json({
       message: "User created successfully",

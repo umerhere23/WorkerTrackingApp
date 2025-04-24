@@ -14,11 +14,22 @@ exports.getAllSupervisors = async (req, res) => {
 };
 
 // CREATE a new supervisor
+ 
 exports.createSupervisor = async (req, res) => {
   try {
     const { FullName, Email, DepartmentID } = req.body;
 
+    if (!FullName || !Email || !DepartmentID) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+     const existingSupervisor = await Supervisor.findOne({ where: { FullName } });
+    if (existingSupervisor) {
+      return res.status(409).json({ error: "Supervisor with this name already exists" });
+    }
+
     const newSupervisor = await Supervisor.create({ FullName, Email, DepartmentID });
+
     res.status(201).json({
       message: "Supervisor created successfully",
       supervisor: newSupervisor
@@ -28,6 +39,7 @@ exports.createSupervisor = async (req, res) => {
     res.status(500).json({ error: "Failed to create supervisor" });
   }
 };
+
 
 // GET a single supervisor by ID
 exports.getSupervisorById = async (req, res) => {

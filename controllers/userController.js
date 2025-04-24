@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User,Supervisor } = require('../models');
 const bcrypt = require('bcrypt');
 
  exports.getAllUsers = async (req, res) => {
@@ -13,7 +13,6 @@ const bcrypt = require('bcrypt');
   }
 };
 
-// POST create user (HR only)
 exports.createUser = async (req, res) => {
   try {
     const { FullName, Role, Email, Password } = req.body;
@@ -36,14 +35,45 @@ exports.createUser = async (req, res) => {
       PasswordHash
     });
 
-    const { PasswordHash: _, ...userWithoutPassword } = newUser.toJSON();
+    if (Role === 'Supervisor') {
+      const existingSupervisor = await Supervisor.findOne({ where: { FullName } });
+      if (existingSupervisor) {
+        return res.status(409).json({ error: "Supervisor with this name already exists" });
+      }
 
+      const newSupervisor = await Supervisor.create({
+        SupervisorID: newUser.UserID,
+        FullName,
+        Email,
+        DepartmentID: req.body.DepartmentID
+      });
+
+      return res.status(201).json({
+        message: "User and Supervisor created successfully",
+        user: {
+          id: newUser.UserID,
+          name: newUser.FullName,
+          email: newUser.Email,
+          role: newUser.Role
+        },
+        supervisor: {
+          id: newSupervisor.SupervisorID,
+          name: newSupervisor.FullName,
+          email: newSupervisor.Email,
+          department: newSupervisor.DepartmentID
+        }
+      });
+    }
+
+    const { PasswordHash: _, ...userWithoutPassword } = newUser.toJSON();
     res.status(201).json(userWithoutPassword);
+
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Failed to create user" });
   }
 };
+
 
 // GET single user by ID
 exports.getUserById = async (req, res) => {
