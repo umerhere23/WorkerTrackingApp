@@ -13,8 +13,7 @@ exports.getAllJobTitles = async (req, res) => {
   }
 };
 
-// CREATE a new job title
-exports.createJobTitle = async (req, res) => {
+ exports.createJobTitle = async (req, res) => {
   try {
     const { Title, DepartmentID } = req.body;
 
